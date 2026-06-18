@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DJ Johnkey</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.8)),
+        url("logo.png") center/cover no-repeat;
+    color: white;
+}
+.card {
+    width: 90%;
+    max-width: 430px;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 0 30px rgba(0,200,255,.35);
+}
+.logo {
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    box-shadow: 0 0 25px rgba(255,255,255,.2);
+}
+
+/* Kiểu font chữ DJ JOHNKEY mới đẹp hơn, phong cách EDM */
+h1 {
+    font-family: 'Arial Black', Impact, sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-shadow: 0 0 10px #00d9ff, 0 0 20px #00d9ff, 0 0 30px #0055ff;
+}
+
+.role {
+    color: #00d9ff;
+    margin-bottom: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.phone {
+    opacity: .85;
+    margin-bottom: 20px;
+}
+a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    margin: 12px 0;
+    padding: 14px;
+    border-radius: 14px;
+    background: #1f1f40;
+    transition: .25s;
+}
+a:hover {
+    background: #00bfff;
+    transform: scale(1.03);
+}
+
+/* CSS cho bộ điều khiển nhạc */
+.music-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 20px;
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.15);
+    box-shadow: 0 0 15px rgba(0,200,255,.2);
+    z-index: 1000;
+}
+.music-controls button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.music-controls button:hover {
+    transform: scale(1.15);
+}
+.music-controls input[type="range"] {
+    width: 80px;
+    cursor: pointer;
+    accent-color: #00d9ff;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <img src="logo.png" class="logo" alt="DJ Johnkey">
+
+    <h1>DJ JOHNKEY</h1>
+    <div class="role">DJ • Music Producer</div>
+    <div class="phone">📞 0352181674</div>
+
+    <a href="https://www.facebook.com/share/174Vz5A9uA/" target="_blank">Facebook</a>
+    <a href="http://zalo.me/84352181674" target="_blank">Zalo</a>
+    <a href="http://t.me/quandayno1" target="_blank">Telegram</a>
+    <a href="https://t.me/nhachethan" target="_blank">Kênh nonstop</a>
+    <a href="https://t.me/tracklotnew" target="_blank">Kênh Track Nhạc DJ</a>
+</div>
+
+<div class="music-controls">
+    <button id="play-pause-btn" title="Phát/Tạm dừng">⏸️</button>
+    <span style="font-size: 14px;">🔉</span>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" title="Chỉnh âm lượng">
+    <span style="font-size: 14px;">🔊</span>
+</div>
+
+<audio id="bg-music" autoplay loop>
+    <source src="nhacnen.mp3" type="audio/mpeg">
+    Trình duyệt của bạn không hỗ trợ thẻ audio.
+</audio>
+
+<script>
+    const audio = document.getElementById('bg-music');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const volumeSlider = document.getElementById('volume-slider');
+
+    // Thiết lập âm lượng ban đầu
+    audio.volume = volumeSlider.value;
+
+    // Bật/Tắt nhạc thủ công khi nhấn vào nút
+    playPauseBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play().catch(err => console.log("Bị trình duyệt chặn: ", err));
+            playPauseBtn.textContent = '⏸️';
+        } else {
+            audio.pause();
+            playPauseBtn.textContent = '▶️';
+        }
+    });
+
+    // Kéo thanh trượt để chỉnh âm lượng
+    volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+    });
+
+    // Giải pháp vượt qua chính sách bảo mật Autoplay của trình duyệt:
+    // Tự động phát nhạc ngay khi người dùng click/chạm bất cứ đâu trên trang web
+    function autoPlayMusic() {
+        audio.play().then(() => {
+            playPauseBtn.textContent = '⏸️';
+            // Khi đã phát được nhạc thành công thì gỡ bỏ sự kiện này đi
+            document.removeEventListener('click', autoPlayMusic);
+            document.removeEventListener('touchstart', autoPlayMusic);
+        }).catch(error => {
+            console.log("Đợi người dùng tương tác để phát nhạc...");
+        });
+    }
+
+    document.addEventListener('click', autoPlayMusic);
+    document.addEventListener('touchstart', autoPlayMusic);
+</script>
+
+</body>
+</html>
