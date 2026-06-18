@@ -234,7 +234,6 @@ a:hover::before {
 </head>
 <body>
 
-<!-- Khung đếm mắt xem Live -->
 <div class="view-counter">
     <div class="live-dot"></div>
     <span class="eye-icon">👁️</span>
@@ -248,7 +247,6 @@ a:hover::before {
     <div class="role">DJ • HOA QUA SON TEAM</div>
     <div class="phone">📞 0352181674</div>
 
-    <!-- Sóng nhạc (Audio Visualizer) -->
     <div class="equalizer">
         <span class="bar"></span>
         <span class="bar"></span>
@@ -282,25 +280,48 @@ a:hover::before {
     const playPauseBtn = document.getElementById('play-pause-btn');
     const volumeSlider = document.getElementById('volume-slider');
 
-    audio.volume = volumeSlider.value;
+    // Chỉnh âm lượng và thanh trượt về 0 bằng JS ngay khi tải trang
+    audio.volume = 0;
+    volumeSlider.value = 0;
+    
+    let fadeInterval;
+
+    // Hàm tự động tăng âm lượng dần lên 50% (0.5)
+    function fadeAudioIn() {
+        clearInterval(fadeInterval);
+        fadeInterval = setInterval(() => {
+            if (audio.volume < 0.5) {
+                let newVol = Math.min(audio.volume + 0.05, 0.5);
+                audio.volume = newVol;
+                volumeSlider.value = newVol;
+            } else {
+                clearInterval(fadeInterval);
+            }
+        }, 200); 
+    }
 
     playPauseBtn.addEventListener('click', () => {
         if (audio.paused) {
-            audio.play().catch(err => console.log("Bị chặn: ", err));
+            audio.play().then(() => {
+                fadeAudioIn();
+            }).catch(err => console.log("Bị chặn: ", err));
             playPauseBtn.textContent = '⏸️';
         } else {
             audio.pause();
+            clearInterval(fadeInterval); // Dừng tăng tự động nếu người dùng bấm Pause
             playPauseBtn.textContent = '▶️';
         }
     });
 
     volumeSlider.addEventListener('input', (e) => {
+        clearInterval(fadeInterval); // Dừng tăng tự động nếu người dùng tự kéo thanh
         audio.volume = e.target.value;
     });
 
     function autoPlayMusic() {
         audio.play().then(() => {
             playPauseBtn.textContent = '⏸️';
+            fadeAudioIn();
             document.removeEventListener('click', autoPlayMusic);
             document.removeEventListener('touchstart', autoPlayMusic);
         }).catch(error => console.log("Đợi tương tác..."));
