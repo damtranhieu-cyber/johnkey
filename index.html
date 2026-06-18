@@ -1,349 +1,538 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DJ Johnkey</title>
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background:
-        linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.9)),
-        url("logo.png") center/cover no-repeat;
-    background-attachment: fixed;
-    color: white;
-    overflow: hidden; 
-    animation: bgPulse 10s infinite alternate; /* Hiệu ứng nền */
-}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Hoa Qua Son Team</title>
+  <style>
+    :root{
+      --bg1:#050816;
+      --bg2:#0b1030;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.78);
+      --cyan:#00d9ff;
+      --pink:#ff00cc;
+      --lime:#ccff00;
+      --shadow:0 0 30px rgba(0, 217, 255, .35);
+    }
 
-@keyframes bgPulse {
-    0% { backdrop-filter: hue-rotate(0deg); }
-    100% { backdrop-filter: hue-rotate(30deg); }
-}
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      overflow:hidden;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(0,217,255,.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(255,0,204,.10), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
 
-/* Thẻ Card: Hiệu ứng lơ lửng + Bóng đổ LED RGB đổi màu */
-.card {
-    width: 90%;
-    max-width: 430px;
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    backdrop-filter: blur(14px);
-    background: rgba(255,255,255,.05);
-    border: 1px solid rgba(255,255,255,.1);
-    animation: floatCard 4s ease-in-out infinite, rgbGlow 6s linear infinite;
-}
+    /* nền động */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,217,255,.12), transparent 18%),
+        radial-gradient(circle at 80% 30%, rgba(255,0,204,.12), transparent 17%),
+        radial-gradient(circle at 45% 75%, rgba(204,255,0,.08), transparent 16%);
+      filter: blur(30px);
+      animation:bgFloat 14s ease-in-out infinite alternate, bgPulse 8s ease-in-out infinite alternate;
+      pointer-events:none;
+      z-index:0;
+    }
 
-@keyframes floatCard {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
-    100% { transform: translateY(0px); }
-}
+    @keyframes bgFloat{
+      0%{transform:translate3d(0,0,0) scale(1)}
+      100%{transform:translate3d(3%, -2%, 0) scale(1.06)}
+    }
+    @keyframes bgPulse{
+      0% { backdrop-filter: hue-rotate(0deg); }
+      100% { backdrop-filter: hue-rotate(30deg); }
+    }
 
-@keyframes rgbGlow {
-    0% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.4); border-color: rgba(0, 217, 255, 0.3); }
-    33% { box-shadow: 0 0 30px rgba(255, 0, 204, 0.4); border-color: rgba(255, 0, 204, 0.3); }
-    66% { box-shadow: 0 0 30px rgba(204, 255, 0, 0.4); border-color: rgba(204, 255, 0, 0.3); }
-    100% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.4); border-color: rgba(0, 217, 255, 0.3); }
-}
+    /* particles */
+    #particles{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:1;
+      pointer-events:none;
+      opacity:.9;
+    }
 
-/* Hiệu ứng đập nhịp tim cho Logo */
-.logo {
-    width: 170px;
-    height: 170px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 20px;
-    animation: pulseLogo 1.5s infinite alternate;
-}
+    /* Loading overlay */
+    .loading{
+      position:fixed;
+      inset:0;
+      z-index:50;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.38);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      cursor:pointer;
+      transition:opacity .45s ease, visibility .45s ease;
+    }
+    .loading.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .loading-card{
+      width:min(92vw, 380px);
+      padding:26px 22px;
+      border-radius:24px;
+      text-align:center;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 0 28px rgba(0,217,255,.18);
+      backdrop-filter: blur(10px);
+      transform:translateY(0);
+      animation:floatCard 3.8s ease-in-out infinite, rgbGlow 6s linear infinite;
+    }
+    .loading-title{
+      margin:8px 0 8px;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:1.2px;
+      text-shadow:0 0 10px rgba(0,217,255,.55), 0 0 22px rgba(0,85,255,.5);
+    }
+    .loading-sub{
+      margin:0 0 16px;
+      color:rgba(255,255,255,.82);
+      font-size:14px;
+    }
+    .tap-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.14);
+      color:white;
+      font-weight:700;
+      user-select:none;
+      animation:pulseTap 1.25s ease-in-out infinite;
+    }
+    .tap-dot{
+      width:10px;height:10px;border-radius:50%;
+      background:#00d9ff;
+      box-shadow:0 0 14px #00d9ff;
+    }
 
-@keyframes pulseLogo {
-    0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 217, 255, 0.4); }
-    100% { transform: scale(1.06); box-shadow: 0 0 40px rgba(0, 217, 255, 0.8), 0 0 20px rgba(255, 0, 204, 0.6); }
-}
+    @keyframes pulseTap{
+      0%,100%{transform:scale(1); box-shadow:0 0 0 rgba(0,217,255,0);}
+      50%{transform:scale(1.03); box-shadow:0 0 20px rgba(0,217,255,.14);}
+    }
 
-h1 {
-    font-family: 'Arial Black', Impact, sans-serif;
-    font-size: 36px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    color: #ffffff;
-    text-shadow: 0 0 10px #00d9ff, 0 0 20px #00d9ff, 0 0 30px #0055ff;
-}
+    /* app */
+    .app{
+      position:relative;
+      z-index:2;
+      width:100%;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      opacity:0;
+      transform:scale(.98);
+      transition:opacity .5s ease, transform .5s ease;
+      pointer-events:none;
+    }
+    .app.show{
+      opacity:1;
+      transform:scale(1);
+      pointer-events:auto;
+    }
 
-.role {
-    color: #00d9ff;
-    margin-bottom: 8px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-.phone {
-    opacity: .85;
-    margin-bottom: 15px;
-}
+    /* card */
+    .card{
+      width:90%;
+      max-width:430px;
+      padding:30px 24px 26px;
+      border-radius:24px;
+      text-align:center;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      animation:floatCard 4s ease-in-out infinite, rgbGlow 6s linear infinite;
+      box-shadow:0 20px 70px rgba(0,0,0,.32);
+    }
 
-/* Sóng nhạc ảo (Audio Visualizer) */
-.equalizer {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 5px;
-    height: 30px;
-    margin-bottom: 20px;
-}
-.bar {
-    width: 6px;
-    background: #00d9ff;
-    border-radius: 3px;
-    animation: bounceBar 0.5s infinite alternate ease-in;
-}
-.bar:nth-child(1) { animation-delay: 0.1s; height: 10px; }
-.bar:nth-child(2) { animation-delay: 0.3s; height: 25px; }
-.bar:nth-child(3) { animation-delay: 0.0s; height: 15px; }
-.bar:nth-child(4) { animation-delay: 0.2s; height: 30px; }
-.bar:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+    @keyframes floatCard{
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
 
-@keyframes bounceBar {
-    0% { transform: scaleY(0.3); background: #00d9ff; }
-    100% { transform: scaleY(1); background: #ff00cc; box-shadow: 0 0 10px #ff00cc; }
-}
+    @keyframes rgbGlow{
+      0% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.4), 0 20px 70px rgba(0,0,0,.3); border-color: rgba(0, 217, 255, 0.3); }
+      33% { box-shadow: 0 0 30px rgba(255, 0, 204, 0.4), 0 20px 70px rgba(0,0,0,.3); border-color: rgba(255, 0, 204, 0.3); }
+      66% { box-shadow: 0 0 30px rgba(204, 255, 0, 0.4), 0 20px 70px rgba(0,0,0,.3); border-color: rgba(204, 255, 0, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.4), 0 20px 70px rgba(0,0,0,.3); border-color: rgba(0, 217, 255, 0.3); }
+    }
 
-/* Nút bấm & Ánh sáng quét (Shine Sweep) */
-a {
-    display: block;
-    position: relative;
-    overflow: hidden;
-    text-decoration: none;
-    color: white;
-    margin: 12px 0;
-    padding: 14px;
-    border-radius: 14px;
-    background: #1f1f40;
-    transition: 0.3s;
-    border: 1px solid transparent;
-    z-index: 1;
-}
+    .logo{
+      width:170px;
+      height:170px;
+      object-fit:cover;
+      border-radius:50%;
+      margin:0 auto 18px;
+      display:block;
+      animation:pulseLogo 1.5s infinite alternate;
+      border:2px solid rgba(255,255,255,.16);
+      box-shadow:0 0 28px rgba(0,217,255,.35);
+      background:rgba(255,255,255,.04);
+    }
 
-a::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-    transform: skewX(-25deg);
-    transition: 0.5s;
-    z-index: -1;
-}
+    @keyframes pulseLogo{
+      0% { transform: scale(1); box-shadow: 0 0 15px rgba(0, 217, 255, 0.4); }
+      100% { transform: scale(1.06); box-shadow: 0 0 40px rgba(0, 217, 255, 0.8), 0 0 20px rgba(255, 0, 204, 0.6); }
+    }
 
-a:hover {
-    background: #00bfff;
-    transform: scale(1.05);
-    border: 1px solid rgba(255,255,255,0.5);
-    box-shadow: 0 0 20px rgba(0, 191, 255, 0.6);
-}
+    h1{
+      font-family:'Arial Black', Impact, sans-serif;
+      font-size:36px;
+      font-weight:900;
+      letter-spacing:2px;
+      margin:0 0 8px;
+      color:#ffffff;
+      text-shadow:0 0 10px #00d9ff, 0 0 20px #00d9ff, 0 0 30px #0055ff;
+    }
 
-a:hover::before {
-    left: 150%;
-}
+    .role{
+      color:#00d9ff;
+      margin-bottom:8px;
+      font-weight:bold;
+      letter-spacing:1px;
+    }
 
-/* Bộ điều khiển nhạc */
-.music-controls {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 18px;
-    border-radius: 20px;
-    backdrop-filter: blur(14px);
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.15);
-    box-shadow: 0 0 15px rgba(0,200,255,.2);
-    z-index: 1000;
-}
-.music-controls button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    outline: none;
-    transition: transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.music-controls button:hover {
-    transform: scale(1.15);
-}
-.music-controls input[type="range"] {
-    width: 80px;
-    cursor: pointer;
-    accent-color: #00d9ff;
-}
+    .phone{
+      opacity:.88;
+      margin-bottom:16px;
+      font-size:15px;
+    }
 
-/* Khung hiển thị số người xem góc phải */
-.view-counter {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    backdrop-filter: blur(14px);
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.15);
-    box-shadow: 0 0 15px rgba(255, 42, 42, 0.4);
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    z-index: 1000;
-}
-.live-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #ff2a2a;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #ff2a2a;
-    animation: blink 0.8s infinite alternate;
-}
-.eye-icon {
-    font-size: 16px;
-}
+    .equalizer{
+      display:flex;
+      justify-content:center;
+      align-items:flex-end;
+      gap:5px;
+      height:34px;
+      margin-bottom:20px;
+    }
+    .bar{
+      width:6px;
+      background:#00d9ff;
+      border-radius:3px;
+      animation:bounceBar .5s infinite alternate ease-in;
+    }
+    .bar:nth-child(1){ animation-delay:.1s; height:10px; }
+    .bar:nth-child(2){ animation-delay:.3s; height:25px; }
+    .bar:nth-child(3){ animation-delay:0s; height:15px; }
+    .bar:nth-child(4){ animation-delay:.2s; height:30px; }
+    .bar:nth-child(5){ animation-delay:.4s; height:20px; }
 
-@keyframes blink {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0.3; transform: scale(0.8); }
-}
-</style>
+    @keyframes bounceBar{
+      0% { transform: scaleY(0.3); background: #00d9ff; }
+      100% { transform: scaleY(1); background: #ff00cc; box-shadow: 0 0 10px #ff00cc; }
+    }
+
+    .links{
+      display:grid;
+      gap:12px;
+      margin-top:8px;
+    }
+
+    a.btn{
+      display:block;
+      position:relative;
+      overflow:hidden;
+      text-decoration:none;
+      color:white;
+      padding:14px 16px;
+      border-radius:14px;
+      background:#1f1f40;
+      transition:0.3s ease;
+      border:1px solid rgba(255,255,255,.08);
+      z-index:1;
+      box-shadow:0 10px 28px rgba(0,0,0,.18);
+    }
+
+    a.btn::before{
+      content:'';
+      position:absolute;
+      top:0;
+      left:-100%;
+      width:50%;
+      height:100%;
+      background:linear-gradient(to right, transparent, rgba(255,255,255,0.42), transparent);
+      transform:skewX(-25deg);
+      transition:.5s;
+      z-index:-1;
+    }
+
+    a.btn:hover{
+      background:#00bfff;
+      transform:scale(1.04);
+      border:1px solid rgba(255,255,255,0.5);
+      box-shadow:0 0 20px rgba(0, 191, 255, 0.6);
+    }
+    a.btn:hover::before{ left:150%; }
+
+    .music-controls{
+      position:fixed;
+      bottom:20px;
+      left:20px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:20px;
+      backdrop-filter: blur(14px);
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow:0 0 15px rgba(0,200,255,.2);
+      z-index:10;
+    }
+    .music-controls button{
+      background:none;
+      border:none;
+      color:white;
+      font-size:20px;
+      cursor:pointer;
+      outline:none;
+      transition:transform .2s;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .music-controls button:hover{ transform:scale(1.15); }
+    .music-controls input[type="range"]{
+      width:90px;
+      cursor:pointer;
+      accent-color:#00d9ff;
+    }
+
+    .view-counter{
+      position:fixed;
+      top:20px;
+      right:20px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:20px;
+      backdrop-filter: blur(14px);
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow:0 0 15px rgba(255, 42, 42, 0.35);
+      font-size:14px;
+      font-weight:bold;
+      color:white;
+      z-index:10;
+      user-select:none;
+    }
+    .live-dot{
+      width:8px;
+      height:8px;
+      background-color:#ff2a2a;
+      border-radius:50%;
+      box-shadow:0 0 8px #ff2a2a;
+      animation:blink .8s infinite alternate;
+    }
+    .eye-icon{ font-size:16px; }
+
+    @keyframes blink{
+      0% { opacity:1; transform:scale(1); }
+      100% { opacity:.3; transform:scale(.8); }
+    }
+
+    /* responsive */
+    @media (max-width:420px){
+      .card{ padding:26px 18px 20px; }
+      .logo{ width:145px; height:145px; }
+      h1{ font-size:30px; }
+      .music-controls{ left:12px; bottom:12px; }
+      .view-counter{ right:12px; top:12px; }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="particles"></canvas>
 
-<div class="view-counter">
-    <div class="live-dot"></div>
-    <span class="eye-icon">👁️</span>
-    <span id="view-count">200</span>
-</div>
+  <!-- Loading screen: bấm vào đây mới vào web -->
+  <div class="loading" id="loading">
+    <div class="loading-card">
+      <div style="font-size:44px; line-height:1;">✨</div>
+      <div class="loading-title">HOA QUA SON TEAM</div>
+      <p class="loading-sub">Nhấn vào màn hình để mở trang</p>
+      <div class="tap-pill"><span class="tap-dot"></span> CLICK TO ENTER</div>
+    </div>
+  </div>
 
-<div class="card">
-    <img src="logo.png" class="logo" alt="DJ Johnkey">
-
-    <h1>DJ JOHNKEY</h1>
-    <div class="role">DJ • HOA QUA SON TEAM</div>
-    <div class="phone">📞 0352181674</div>
-
-    <div class="equalizer">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+  <!-- Nội dung web -->
+  <main class="app" id="app">
+    <div class="view-counter">
+      <span class="live-dot"></span>
+      <span class="eye-icon">👁</span>
+      <span>Đang xem: <span id="views">1,284</span></span>
     </div>
 
-    <a href="https://www.facebook.com/share/174Vz5A9uA/" target="_blank">Facebook</a>
-    <a href="http://zalo.me/84352181674" target="_blank">Zalo</a>
-    <a href="http://t.me/quandayno1" target="_blank">Telegram</a>
-    <a href="https://t.me/nhachethan" target="_blank">Kênh nonstop</a>
-    <a href="https://t.me/tracklotnew" target="_blank">Kênh Track Nhạc DJ</a>
-</div>
+    <div class="music-controls">
+      <button id="playBtn" aria-label="Play/Pause">▶</button>
+      <input id="vol" type="range" min="0" max="100" value="60" />
+    </div>
 
-<div class="music-controls">
-    <button id="play-pause-btn" title="Phát/Tạm dừng">⏸️</button>
-    <span style="font-size: 14px;">🔉</span>
-    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" title="Chỉnh âm lượng">
-    <span style="font-size: 14px;">🔊</span>
-</div>
+    <section class="card">
+      <img
+        class="logo"
+        src="https://i.imgur.com/7kQEsHU.jpeg"
+        alt="Logo"
+        onerror="this.src='https://via.placeholder.com/300x300.png?text=LOGO';"
+      />
 
-<audio id="bg-music" autoplay loop>
-    <source src="nhacnen.mp3" type="audio/mpeg">
-    Trình duyệt của bạn không hỗ trợ thẻ audio.
-</audio>
+      <h1>DJ JOHNKEY</h1>
+      <div class="role">HOA QUA SON TEAM</div>
+      <div class="phone">📞 0352181674</div>
 
-<script>
-    // --- PHẦN NHẠC NỀN ---
-    const audio = document.getElementById('bg-music');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const volumeSlider = document.getElementById('volume-slider');
+      <div class="equalizer" aria-hidden="true">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
 
-    // Chỉnh âm lượng và thanh trượt về 0 bằng JS ngay khi tải trang
-    audio.volume = 0;
-    volumeSlider.value = 0;
-    
-    let fadeInterval;
+      <div class="links">
+        <a class="btn" href="https://www.facebook.com/share/174Vz5A9uA/" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a class="btn" href="http://zalo.me/84352181674" target="_blank" rel="noopener noreferrer">Zalo</a>
+        <a class="btn" href="http://t.me/quandayno1" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a class="btn" href="https://t.me/nhachethan" target="_blank" rel="noopener noreferrer">Kênh nonstop</a>
+        <a class="btn" href="https://t.me/tracklotnew" target="_blank" rel="noopener noreferrer">Kênh Track Nhạc DJ</a>
+      </div>
+    </section>
+  </main>
 
-    // Hàm tự động tăng âm lượng dần lên 50% (0.5)
-    function fadeAudioIn() {
-        clearInterval(fadeInterval);
-        fadeInterval = setInterval(() => {
-            if (audio.volume < 0.5) {
-                let newVol = Math.min(audio.volume + 0.05, 0.5);
-                audio.volume = newVol;
-                volumeSlider.value = newVol;
-            } else {
-                clearInterval(fadeInterval);
-            }
-        }, 200); 
+  <!-- âm thanh nền: đổi src nếu có link nhạc -->
+  <audio id="bgm" loop>
+    <!-- ví dụ: <source src="music.mp3" type="audio/mpeg"> -->
+  </audio>
+
+  <script>
+    // Click loading => mở web
+    const loading = document.getElementById('loading');
+    const app = document.getElementById('app');
+    let entered = false;
+
+    function enterSite() {
+      if (entered) return;
+      entered = true;
+      loading.classList.add('hide');
+      app.classList.add('show');
     }
 
-    playPauseBtn.addEventListener('click', () => {
-        if (audio.paused) {
-            audio.play().then(() => {
-                fadeAudioIn();
-            }).catch(err => console.log("Bị chặn: ", err));
-            playPauseBtn.textContent = '⏸️';
+    loading.addEventListener('click', enterSite);
+
+    // Nút âm nhạc
+    const bgm = document.getElementById('bgm');
+    const playBtn = document.getElementById('playBtn');
+    const vol = document.getElementById('vol');
+
+    bgm.volume = vol.value / 100;
+
+    playBtn.addEventListener('click', async () => {
+      try {
+        if (bgm.paused) {
+          await bgm.play();
+          playBtn.textContent = '⏸';
         } else {
-            audio.pause();
-            clearInterval(fadeInterval); // Dừng tăng tự động nếu người dùng bấm Pause
-            playPauseBtn.textContent = '▶️';
+          bgm.pause();
+          playBtn.textContent = '▶';
         }
+      } catch (e) {
+        alert('Bạn chưa gắn file nhạc vào thẻ audio.');
+      }
     });
 
-    volumeSlider.addEventListener('input', (e) => {
-        clearInterval(fadeInterval); // Dừng tăng tự động nếu người dùng tự kéo thanh
-        audio.volume = e.target.value;
+    vol.addEventListener('input', () => {
+      bgm.volume = vol.value / 100;
     });
 
-    function autoPlayMusic() {
-        audio.play().then(() => {
-            playPauseBtn.textContent = '⏸️';
-            fadeAudioIn();
-            document.removeEventListener('click', autoPlayMusic);
-            document.removeEventListener('touchstart', autoPlayMusic);
-        }).catch(error => console.log("Đợi tương tác..."));
+    // Mô phỏng số mắt xem
+    const views = document.getElementById('views');
+    let count = 1284;
+    setInterval(() => {
+      count += Math.random() > 0.5 ? 1 : 0;
+      views.textContent = count.toLocaleString('vi-VN');
+    }, 1800);
+
+    // Particles canvas
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles = [];
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
     }
 
-    document.addEventListener('click', autoPlayMusic);
-    document.addEventListener('touchstart', autoPlayMusic);
+    function makeParticles() {
+      particles = [];
+      const count = Math.min(90, Math.floor((w * h) / 18000));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: rand(0, w),
+          y: rand(0, h),
+          r: rand(1, 3),
+          vx: rand(-0.35, 0.35),
+          vy: rand(-0.25, 0.25),
+          a: rand(0.25, 0.9)
+        });
+      }
+    }
+    makeParticles();
 
-    // --- PHẦN ĐẾM MẮT XEM (LIVE VIEWS) ---
-    const viewCountElement = document.getElementById('view-count');
-    let currentViews = 200 + Math.floor(Math.random() * 30); 
-    viewCountElement.innerText = currentViews;
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
 
-    setInterval(() => {
-        const change = Math.floor(Math.random() * 6) - 2; 
-        currentViews += change;
-        if (currentViews < 200) {
-            currentViews = 200 + Math.floor(Math.random() * 5); 
-        }
-        viewCountElement.innerText = currentViews;
-    }, 2500);
-</script>
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
 
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        if (p.y < -10) p.y = h + 10;
+        if (p.y > h + 10) p.y = -10;
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0,217,255,.35)';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
 </body>
 </html>
