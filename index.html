@@ -32,7 +32,7 @@
         linear-gradient(135deg, var(--bg1), var(--bg2));
     }
 
-    /* nền động */
+    /* Nền động */
     body::before{
       content:"";
       position:fixed;
@@ -56,7 +56,7 @@
       100% { backdrop-filter: hue-rotate(30deg); }
     }
 
-    /* particles */
+    /* Hiệu ứng hạt (Particles) */
     #particles{
       position:fixed;
       inset:0;
@@ -67,7 +67,7 @@
       opacity:.9;
     }
 
-    /* Loading overlay */
+    /* Màn hình chờ (Loading) */
     .loading{
       position:fixed;
       inset:0;
@@ -134,7 +134,7 @@
       50%{transform:scale(1.03); box-shadow:0 0 20px rgba(0,217,255,.14);}
     }
 
-    /* app */
+    /* Container chính của Web */
     .app{
       position:relative;
       z-index:2;
@@ -155,7 +155,7 @@
       pointer-events:auto;
     }
 
-    /* card */
+    /* Thẻ thông tin cá nhân (Card) */
     .card{
       width:90%;
       max-width:430px;
@@ -291,6 +291,42 @@
     }
     a.btn:hover::before{ left:150%; }
 
+    /* Bộ đếm mắt xem (Góc trái trên) */
+    .view-counter {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 20px;
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 0 15px rgba(0,200,255,.2);
+      z-index: 10;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #ff2a2a;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff2a2a;
+      animation: blink 0.8s infinite alternate;
+    }
+    
+    .eye-icon { font-size: 16px; }
+
+    @keyframes blink {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    /* Điều khiển âm nhạc (Góc trái dưới) */
     .music-controls{
       position:fixed;
       bottom:20px;
@@ -325,66 +361,43 @@
       accent-color:#00d9ff;
     }
 
-   <div class="view-counter">
-  <span class="live-dot"></span>
-  <span class="eye-icon">👁</span>
-  <span>Lượt xem: <span id="views">...</span></span>
-</div>
-    }
-    .live-dot{
-      width:8px;
-      height:8px;
-      background-color:#ff2a2a;
-      border-radius:50%;
-      box-shadow:0 0 8px #ff2a2a;
-      animation:blink .8s infinite alternate;
-    }
-    .eye-icon{ font-size:16px; }
-
-    @keyframes blink{
-      0% { opacity:1; transform:scale(1); }
-      100% { opacity:.3; transform:scale(.8); }
-    }
-
-    /* responsive */
+    /* Responsive cho màn hình nhỏ */
     @media (max-width:420px){
       .card{ padding:26px 18px 20px; }
       .logo{ width:145px; height:145px; }
       h1{ font-size:30px; }
       .music-controls{ left:12px; bottom:12px; }
-      .view-counter{ right:12px; top:12px; }
+      .view-counter{ left:12px; top:12px; }
     }
   </style>
 </head>
 <body>
   <canvas id="particles"></canvas>
 
-  <!-- Loading screen: bấm vào đây mới vào web -->
   <div class="loading" id="loading">
     <div class="loading-card">
       <div style="font-size:44px; line-height:1;">✨</div>
-      <div class="loading-title">HOA QUA SON TEAM</div>
+      <div class="loading-title">DJ JOHNKEY</div>
       <p class="loading-sub">Nhấn vào màn hình để mở trang</p>
       <div class="tap-pill"><span class="tap-dot"></span> CLICK TO ENTER</div>
     </div>
   </div>
 
-  <!-- Nội dung web -->
   <main class="app" id="app">
+    
     <div class="view-counter">
       <span class="live-dot"></span>
       <span class="eye-icon">👁</span>
-      <span>Đang xem: <span id="views">1,284</span></span>
+      <span>Lượt xem: <span id="views">...</span></span>
     </div>
+
     <div class="music-controls">
       <button id="playBtn" aria-label="Play/Pause">▶</button>
       <input id="vol" type="range" min="0" max="100" value="60" />
     </div>
 
     <section class="card">
-     <section class="card">
-    <img class="logo" src="logo.png" alt="Logo" />
-
+      <img class="logo" src="logo.png" alt="Logo" />
       <h1>DJ JOHNKEY</h1>
       <div class="role">HOA QUA SON TEAM</div>
       <div class="phone">📞 0352181674</div>
@@ -397,41 +410,34 @@
         <span class="bar"></span>
       </div>
 
-     <div class="links">
-    <a class="btn" href="https://www.facebook.com/share/174Vz5A9uA/" target="_blank">
-        Facebook
-    </a>
-
-    <a class="btn" href="http://zalo.me/84352181674" target="_blank">
-        Zalo
-    </a>
-
-    <a class="btn" href="http://t.me/quandayno1" target="_blank">
-        Telegram
-    </a>
-
-    <a class="btn" href="https://soundcloud.com/teamhoaquason" target="_blank">
-        ☁ SoundCloud
-    </a>
-
-    <a class="btn" href="https://t.me/nhachethan" target="_blank">
-        Kênh nonstop
-    </a>
-
-    <a class="btn" href="https://t.me/tracklotnew" target="_blank">
-        Kênh Track Nhạc DJ
-    </a>
-</div>
+      <div class="links">
+        <a class="btn" href="https://www.facebook.com/share/174Vz5A9uA/" target="_blank">
+            Facebook
+        </a>
+        <a class="btn" href="http://zalo.me/84352181674" target="_blank">
+            Zalo
+        </a>
+        <a class="btn" href="http://t.me/quandayno1" target="_blank">
+            Telegram
+        </a>
+        <a class="btn" href="https://soundcloud.com/teamhoaquason" target="_blank">
+            ☁ SoundCloud
+        </a>
+        <a class="btn" href="https://t.me/nhachethan" target="_blank">
+            Kênh nonstop
+        </a>
+        <a class="btn" href="https://t.me/tracklotnew" target="_blank">
+            Kênh Track Nhạc DJ
+        </a>
+      </div>
     </section>
   </main>
 
-  <!-- âm thanh nền: đổi src nếu có link nhạc -->
   <audio id="bgm" loop>
-    <!-- ví dụ: <source src="music.mp3" type="audio/mpeg"> -->
-  </audio>
+    </audio>
 
   <script>
-    // Click loading => mở web
+    // Xử lý sự kiện click loading để mở web
     const loading = document.getElementById('loading');
     const app = document.getElementById('app');
     let entered = false;
@@ -445,7 +451,7 @@
 
     loading.addEventListener('click', enterSite);
 
-    // Nút âm nhạc
+    // Xử lý trình phát nhạc
     const bgm = document.getElementById('bgm');
     const playBtn = document.getElementById('playBtn');
     const vol = document.getElementById('vol');
@@ -470,15 +476,26 @@
       bgm.volume = vol.value / 100;
     });
 
-    // Mô phỏng số mắt xem
-const views = document.getElementById('views');
-let count = 1284;
-setInterval(() => {
-  count += Math.random() > 0.5 ? 1 : 0;
-  views.textContent = count.toLocaleString('vi-VN');
-}, 1800);
+    // --- XỬ LÝ API ĐẾM LƯỢT XEM THẬT ---
+    const viewsElement = document.getElementById('views');
+    // Thay đổi 2 biến này nếu bạn có cấu hình riêng (hiện tại mình để tên djjohnkey)
+    const namespace = 'hoaquason_team'; 
+    const key = 'djjohnkey_profile_views';
 
-    // Particles canvas
+    // Gọi API của counterapi.dev để lấy và tăng số đếm thực tế
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+      .then(response => response.json())
+      .then(data => {
+        // Cập nhật số đếm thực vào giao diện
+        viewsElement.textContent = data.count.toLocaleString('vi-VN');
+      })
+      .catch(error => {
+        console.error('Lỗi khi tải bộ đếm lượt xem:', error);
+        viewsElement.textContent = 'Lỗi kết nối';
+      });
+
+
+    // --- HIỆU ỨNG HẠT (PARTICLES) BẰNG CANVAS ---
     const canvas = document.getElementById('particles');
     const ctx = canvas.getContext('2d');
     let w, h, particles = [];
@@ -529,7 +546,6 @@ setInterval(() => {
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       }
-
       requestAnimationFrame(draw);
     }
     draw();
