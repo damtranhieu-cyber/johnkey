@@ -325,24 +325,11 @@
       accent-color:#00d9ff;
     }
 
-    .view-counter{
-      position:fixed;
-      top:20px;
-      right:20px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 14px;
-      border-radius:20px;
-      backdrop-filter: blur(14px);
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.15);
-      box-shadow:0 0 15px rgba(255, 42, 42, 0.35);
-      font-size:14px;
-      font-weight:bold;
-      color:white;
-      z-index:10;
-      user-select:none;
+   <div class="view-counter">
+  <span class="live-dot"></span>
+  <span class="eye-icon">👁</span>
+  <span>Lượt xem: <span id="views">...</span></span>
+</div>
     }
     .live-dot{
       width:8px;
@@ -389,7 +376,6 @@
       <span class="eye-icon">👁</span>
       <span>Đang xem: <span id="views">1,284</span></span>
     </div>
-
     <div class="music-controls">
       <button id="playBtn" aria-label="Play/Pause">▶</button>
       <input id="vol" type="range" min="0" max="100" value="60" />
@@ -485,12 +471,12 @@
     });
 
     // Mô phỏng số mắt xem
-    const views = document.getElementById('views');
-    let count = 1284;
-    setInterval(() => {
-      count += Math.random() > 0.5 ? 1 : 0;
-      views.textContent = count.toLocaleString('vi-VN');
-    }, 1800);
+const views = document.getElementById('views');
+let count = 1284;
+setInterval(() => {
+  count += Math.random() > 0.5 ? 1 : 0;
+  views.textContent = count.toLocaleString('vi-VN');
+}, 1800);
 
     // Particles canvas
     const canvas = document.getElementById('particles');
