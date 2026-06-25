@@ -385,6 +385,78 @@
       accent-color:#00d9ff;
     }
 
+    /* QR Modal Lightbox */
+    .qr-modal{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.75);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .3s ease, visibility .3s ease;
+      cursor:pointer;
+    }
+    .qr-modal.open{
+      opacity:1;
+      visibility:visible;
+    }
+    .qr-modal-inner{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+      transform:scale(.6) translateY(30px);
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .qr-modal.open .qr-modal-inner{
+      transform:scale(1) translateY(0);
+    }
+    .qr-modal-img{
+      width:min(78vw, 300px);
+      height:min(78vw, 300px);
+      object-fit:contain;
+      border-radius:20px;
+      background:white;
+      padding:10px;
+      border:3px solid rgba(0,217,255,.6);
+      box-shadow:0 0 50px rgba(0,217,255,.5), 0 0 100px rgba(255,0,204,.25);
+    }
+    .qr-modal-label{
+      font-size:13px;
+      color:rgba(255,255,255,.7);
+      letter-spacing:1px;
+    }
+    .qr-modal-close{
+      position:absolute;
+      top:-16px;
+      right:-16px;
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.25);
+      color:white;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:background .2s, transform .2s;
+    }
+    .qr-modal-close:hover{
+      background:rgba(255,0,204,.35);
+      transform:scale(1.15);
+    }
+
+    /* Con trỏ pointer cho ảnh QR nhỏ */
+    .qr-img{ cursor:pointer; }
+
     @media (max-width:420px){
       .card{ padding:26px 18px 20px; }
       .logo{ width:145px; height:145px; }
@@ -462,9 +534,41 @@
     </section>
   </main>
 
+  <!-- QR Lightbox Modal -->
+  <div class="qr-modal" id="qrModal">
+    <div class="qr-modal-inner" id="qrModalInner">
+      <div class="qr-modal-close" id="qrClose">✕</div>
+      <img class="qr-modal-img" src="maqr.png" alt="QR Code DJ JohnKey" />
+      <div class="qr-modal-label">📲 Quét để kết nối với DJ JohnKey</div>
+    </div>
+  </div>
+
   <audio id="bgm" src="nhacnen.mp3" loop></audio>
 
   <script>
+    // QR Lightbox
+    const qrModal = document.getElementById('qrModal');
+    const qrClose = document.getElementById('qrClose');
+    const qrImg = document.querySelector('.qr-img');
+
+    qrImg.addEventListener('click', () => {
+      qrModal.classList.add('open');
+    });
+
+    // Click nền hoặc nút X để đóng
+    qrModal.addEventListener('click', (e) => {
+      if (e.target === qrModal) qrModal.classList.remove('open');
+    });
+    qrClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      qrModal.classList.remove('open');
+    });
+
+    // Phím ESC để đóng
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') qrModal.classList.remove('open');
+    });
+
     // Xử lý loading + tự động phát nhạc khi click vào màn hình
     const loading = document.getElementById('loading');
     const app = document.getElementById('app');
